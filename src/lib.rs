@@ -34,36 +34,33 @@ pub struct Unwrap {
 
 #[wasm_bindgen]
 #[cfg(target_arch = "wasm32")]
-pub async fn unwrap() -> Result<(), JsValue> {
+pub async fn unwrap() {
     log!("wasm fetch");
     let mut opts = RequestInit::new();
     opts.method("GET");
     opts.mode(RequestMode::Cors);
 
-    let request = Request::new_with_str_and_init("https://httpbin.org/ip", &opts)?;
+    let request = Request::new_with_str_and_init("https://httpbin.org/ip", &opts).unwrap();
 
     let window = web_sys::window().unwrap();
-    let resp_value = JsFuture::from(window.fetch_with_request(&request)).await?;
+    let resp_value = JsFuture::from(window.fetch_with_request(&request)).await.unwrap();
 
     let resp: Response = resp_value.dyn_into().unwrap();
 
     // Convert this other `Promise` into a rust `Future`.
-    let json = JsFuture::from(resp.json()?).await?;
+    let json = JsFuture::from(resp.json().unwrap()).await.unwrap();
 
     // Use serde to parse the JSON into a struct.
     let responseJson: Unwrap = json.into_serde().unwrap();
 
     log!("{:#?}", responseJson);
 
-    Ok(())
-
 }
 
 #[cfg(target_arch = "x86_64")]
-pub fn unwrap() -> Result<(), Box<dyn std::error::Error>> {
+pub fn unwrap() {
     println!("x86_64 fetch");
     let resp = reqwest::blocking::get("https://httpbin.org/ip")?
         .json::<HashMap<String, String>>()?;
     println!("{:#?}", resp);
-    Ok(())
 }

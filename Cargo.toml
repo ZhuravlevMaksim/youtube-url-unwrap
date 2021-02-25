@@ -8,13 +8,14 @@ edition = "2018"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-wasm-bindgen = "0.2.70"
-wasm-bindgen-futures = "0.4.20"
 serde = { version = "1.0.80", features = ["derive"] }
 Boa = "0.10.0"
 reqwest = { version = "0.11", features = ["blocking", "json"] }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2.70"
 web-sys = { version = "0.3.47", features = ["console", "Request", "RequestInit", "RequestMode", "Response"] }
+wasm-bindgen-futures = "0.4.20"
 
 [profile.release]
-# Tell `rustc` to optimize for small code size.
 opt-level = "s"

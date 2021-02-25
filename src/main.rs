@@ -1,7 +1,6 @@
-
-use std::collections::HashMap;
-use youtube_url_unwrap::unwrap;
+use youtube_url_unwrap::unwrap_url;
 
 fn main() {
-    unwrap();
+    let unwrap = unwrap_url("https://httpbin.org/ip");
+    println!("{:#?}", unwrap);
 }

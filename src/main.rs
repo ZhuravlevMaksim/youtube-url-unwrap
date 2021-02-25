@@ -1,6 +1,6 @@
-use youtube_url_unwrap::unwrap_url;
+use youtube_url_unwrap::{get_opus_stream};
 
 fn main() {
-    let unwrap = unwrap_url("https://httpbin.org/ip");
+    let unwrap = get_opus_stream("a0zUnqF5tNs");
     println!("{:#?}", unwrap);
 }

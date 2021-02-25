@@ -65,19 +65,19 @@ pub fn get_opus_stream(uid: &str) -> AudioStream {
     }
 }
 
-
 fn parse_url(uid: &str) {
+    fn eval_js(s: &str) -> RcString {
+        let mut context = Context::new();
+        context
+            .eval(s).unwrap()
+            .to_string(&mut context).unwrap()
+    }
+
     let string = CLIENT.get(&format!("https://www.youtube.com/embed/{}", uid))
         .send().unwrap().text().unwrap();
     let player_url = &REGEX.captures(&string).unwrap()[1];
 }
 
-fn eval_js(s: &str) -> RcString {
-    let mut context = Context::new();
-    context
-        .eval(s).unwrap()
-        .to_string(&mut context).unwrap()
-}
 
 #[cfg(target_arch = "wasm32")]
 mod wasm {

@@ -23,10 +23,19 @@ impl std::error::Error for NoPlayerResponse {}
 
 #[derive(Debug)]
 pub struct AudioStream {
-    uid: String,
-    title: String,
-    length_seconds: String,
-    url: Option<String>,
+    pub uid: String,
+    pub title: String,
+    pub length_seconds: String,
+    pub url: Option<String>,
+}
+
+impl AudioStream {
+    pub fn file_name(&self) -> String {
+        println!("{}", &self.title);
+        Regex::new(r"[<>:/|?*]").unwrap()
+            .replace_all(&self.title, "")
+            .to_string() + ".opus"
+    }
 }
 
 pub struct Extractor {
@@ -79,13 +88,12 @@ impl Extractor {
         let json = self.client.get(&format!("https://www.youtube.com/watch?v={}&pbj=1", uid))
             .send().await?.text().await?;
 
-        let serde_json_value: Value = serde_json::from_str(&json)?;
-        let ref content: Value = serde_json_value[2];
+        let mut serde_json_value: Value = serde_json::from_str(&json)?;
+        let content = serde_json_value.get_mut(2).unwrap();
 
-
-        content.get("playerResponse")
+        content.get_mut("playerResponse")
             .ok_or(NoPlayerResponse.into())
-            .map(|player| player.clone())
+            .map(|player| player.take())
     }
 
     fn decode_stream_url(&self, opus: Option<&Value>) -> Option<String> {
@@ -111,6 +119,6 @@ impl Extractor {
         let string = self.client.get(&format!("https://www.youtube.com/embed/{}", uid))
             .send().await.unwrap().text().await.unwrap();
 
-       self.regex.captures(&string).unwrap()[1].to_owned()
+        self.regex.captures(&string).unwrap()[1].to_owned()
     }
 }

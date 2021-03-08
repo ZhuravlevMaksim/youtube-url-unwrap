@@ -32,7 +32,8 @@ pub struct AudioStream {
 impl AudioStream {
     pub fn file_name(&self) -> String {
         println!("{}", &self.title);
-        Regex::new(r"[<>:/|?*]").unwrap()
+        // [<>:/|?*]
+        Regex::new(r"(?<=.)\\.[^.]+$").unwrap()
             .replace_all(&self.title, "")
             .to_string() + ".opus"
     }

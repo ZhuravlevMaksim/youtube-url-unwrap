@@ -1,6 +1,6 @@
 [package]
 name = "youtube-url-unwrap"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["m.zhuravlev <maks723@yandex.ru>"]
 edition = "2018"
 
@@ -12,14 +12,7 @@ Boa = "0.11.0"
 serde_json = "1.0"
 regex = "1"
 reqwest = { version = "0.11.3", features = ["json"] }
-
-[target.'cfg(target_arch = "x86_64")'.dependencies]
 tokio = { version = "1", features = ["full"] }
-
-[target.'cfg(target_arch = "wasm32")'.dependencies]
-wasm-bindgen = "0.2.70"
-web-sys = { version = "0.3.47", features = ["console", "Request", "RequestInit", "RequestMode", "Response"] }
-wasm-bindgen-futures = "0.4.20"
 
 [profile.release]
 opt-level = "s"

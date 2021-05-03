@@ -1,4 +1,4 @@
-use youtube_url_unwrap::platform::Extractor;
+use youtube_url_unwrap::Extractor;
 
 #[tokio::main]
 async fn  main() -> Result<(), Box<dyn std::error::Error>> {

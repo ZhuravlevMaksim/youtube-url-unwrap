@@ -1,1 +1,1 @@
-rust wasm ready lib
+rust lib

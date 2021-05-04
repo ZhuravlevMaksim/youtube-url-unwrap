@@ -74,7 +74,7 @@ impl Extractor {
         let url = Decoder {
             uid,
             opus,
-            signature_cipher: signature_cipher.unwrap(),
+            signature_cipher,
             client: &self.client,
         }.decode_stream_url().await;
 
@@ -102,7 +102,7 @@ impl Extractor {
 pub struct Decoder<'a> {
     uid: &'a str,
     opus: Option<&'a Value>,
-    signature_cipher: &'a str,
+    signature_cipher: Option<&'a str>,
     client: &'a Client,
 }
 
@@ -139,7 +139,7 @@ impl Decoder<'_> {
                         let caller = "function decrypt(a){return ".to_owned() + function_name + "(a);}";
                         let decryption_function = helper.to_owned() + &*fun_body + &*caller;
 
-                        let cipher = self.signature_cipher
+                        let cipher = self.signature_cipher.unwrap()
                             .split('&')
                             .map(|kv| kv.split('='))
                             .map(|mut kv| (kv.next().unwrap().into(),
